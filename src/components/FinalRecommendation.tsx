@@ -11,8 +11,8 @@ interface FinalRecommendationProps {
   totalQuestions?: number;
 }
 
-const PREP_SECONDS = 60;
-const PRESENT_SECONDS = 60;
+const PREP_SECONDS = 120;
+const PRESENT_SECONDS = 180;
 
 // Typed-only final recommendation: 60s to prepare, then 60s to present in writing.
 export function FinalRecommendation({
@@ -70,9 +70,9 @@ export function FinalRecommendation({
         <h2 className="text-2xl font-bold text-white">Final Recommendation</h2>
         <p className="text-gray-300">
           This is the closing synthesis. You will get{" "}
-          <span className="font-semibold text-bcg-accent">60 seconds to prepare</span>,
+          <span className="font-semibold text-bcg-accent">2 minutes to prepare</span>,
           then{" "}
-          <span className="font-semibold text-bcg-accent">60 seconds to present</span>{" "}
+          <span className="font-semibold text-bcg-accent">3 minutes to present</span>{" "}
           in writing. Cover your <strong>recommendation</strong>,{" "}
           <strong>supporting evidence</strong>, <strong>risks</strong>, and{" "}
           <strong>next steps</strong>.
@@ -82,7 +82,7 @@ export function FinalRecommendation({
           onClick={beginPrep}
           className="rounded-lg bg-bcg-green px-6 py-3 font-semibold text-white hover:bg-bcg-accent"
         >
-          Start — 60 seconds to prepare
+          Start — 2 minutes to prepare
         </button>
       </div>
     );
@@ -104,7 +104,7 @@ export function FinalRecommendation({
           </p>
           <p className="text-lg font-semibold text-white">
             {phase === "prep"
-              ? "Plan your 60-second recommendation"
+              ? "Plan your recommendation"
               : "Write your recommendation"}
           </p>
         </div>
