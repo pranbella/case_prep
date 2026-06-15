@@ -20,3 +20,17 @@ body {
   background: #177b57;
   color: white;
 }
+
+@media print {
+  :root {
+    color-scheme: light;
+  }
+  html,
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+  @page {
+    margin: 14mm;
+  }
+}

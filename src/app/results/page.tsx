@@ -1,9 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { FeedbackPanel } from "@/components/FeedbackPanel";
+import { PrintableReport } from "@/components/PrintableReport";
 import { Scorecard } from "@/components/Scorecard";
+import { CASE_BANK } from "@/data/cases";
+import { visibleExhibits } from "@/lib/caseEngine";
 import { getCurrentRun } from "@/lib/storage";
 import { DIMENSION_LABELS, type SimRun } from "@/lib/types";
 
@@ -15,6 +18,15 @@ export default function ResultsPage() {
     setRun(getCurrentRun());
     setLoaded(true);
   }, []);
+
+  const caseStudy = useMemo(
+    () => (run ? CASE_BANK.find((c) => c.id === run.caseId) ?? null : null),
+    [run]
+  );
+  const reportExhibits = useMemo(
+    () => (caseStudy && run ? visibleExhibits(caseStudy, run.mode) : []),
+    [caseStudy, run]
+  );
 
   if (!loaded) {
     return (
@@ -39,12 +51,24 @@ export default function ResultsPage() {
   }
 
   return (
-    <main className="mx-auto max-w-4xl space-y-6 px-4 py-8">
-      <div className="flex items-center justify-between">
+    <>
+    <main className="mx-auto max-w-4xl space-y-6 px-4 py-8 print:hidden">
+      <div className="flex items-center justify-between gap-3">
         <h1 className="text-2xl font-bold text-white">Your Casey debrief</h1>
-        <Link href="/" className="text-sm text-bcg-accent hover:underline">
-          New simulation →
-        </Link>
+        <div className="flex items-center gap-3">
+          {caseStudy && (
+            <button
+              onClick={() => window.print()}
+              className="rounded-lg border border-ink-600 px-3 py-1.5 text-sm font-semibold text-gray-200 hover:border-gray-500"
+              title="Includes the case evidence, your answers, feedback, and reference answers. Choose 'Save as PDF' in the print dialog."
+            >
+              Download PDF
+            </button>
+          )}
+          <Link href="/" className="text-sm text-bcg-accent hover:underline">
+            New simulation →
+          </Link>
+        </div>
       </div>
 
       <Scorecard run={run} />
@@ -107,5 +131,9 @@ export default function ResultsPage() {
         </Link>
       </div>
     </main>
+    {caseStudy && (
+      <PrintableReport run={run} caseStudy={caseStudy} exhibits={reportExhibits} />
+    )}
+    </>
   );
 }
